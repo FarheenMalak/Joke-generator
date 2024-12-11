@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #c0abb8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content:center ;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #a35886;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #a35886;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #9e407a;
+        }
+
+        .joke {
+            font-size: 18px;
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .joke p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        img{
+            width: 15rem;
+            height: 10rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Programming Joke Generator</h1>
+        <img src="images/joke.gif" alt="" srcset="">
+        <button onclick="getUser()">Generate Joke</button>
+        <div id="jokeContainer" class="joke"></div>
+    </div>
+
+    <script>
+        function getUser() {
+            const jokeContainer = document.getElementById('jokeContainer');
+            fetch(`https://v2.jokeapi.dev/joke/Programming`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Joke not found');
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    // Check if the joke is of type "single" or "twopart"
+                    if (data.type === 'single') {
+                        jokeContainer.innerHTML = `<p>${data.joke}</p>`; // Display the joke directly
+                    } else if (data.type === 'twopart') {
+                        jokeContainer.innerHTML = `<p>${data.setup}</p><p><strong>${data.delivery}</strong></p>`; // Display setup and delivery for two-part jokes
+                    }
+                })
+                .catch((error) => {
+                    jokeContainer.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`; // Display the error message
+                });
+        }
+    </script>
+</body>
+</html>
+
